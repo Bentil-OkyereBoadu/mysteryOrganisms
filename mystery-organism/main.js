@@ -13,10 +13,21 @@ const mockUpStrand = () => {
   return newStrand;
 };
 
+//Function returns an object
 const pAequorFactory = (number, array) => {
   return {
     specimenNum : number,
-    dna: array,
+    _dna: array,
+
+    get dna(){
+      return this._dna;
+    },
+
+    set dna(newdna){
+      this._dna = newdna;
+    },
+
+    //mutate DNA
     mutate(){
       const originalBase = this.dna[0];
       const mutatedBase = returnRandBase();
@@ -25,6 +36,8 @@ const pAequorFactory = (number, array) => {
         return mutatedDna;
         }
     },
+
+    //Compare 2 DNAs to see how similar they are
     compareDNA(dnaObject){
       let counter = 0;
       let percentage = 0;
@@ -38,6 +51,7 @@ const pAequorFactory = (number, array) => {
       return output;
     },
 
+    //check if specimen is likely to survive by checking how many C and G are in the DNA 
     willLikelySurvive(){
       let counter = 0;
       for(let index = 0; index < this.dna.length; index++){
@@ -50,47 +64,26 @@ const pAequorFactory = (number, array) => {
     }   
   }
 }
-/**
- * survivors () {
-      let survivorsArray = [];
-      let mutant = [];
-      let counter = 0;
-      while(this.specimenNum > counter){
-          mutant = this.mutate();
 
-        if(this.willLikelySurvive() === true){
-          survivorsArray.push(mutant);
-        }
-        counter ++;
-      }
-      return survivorsArray;
-    }
- */
 
-let specimen =  ['G', 'C', 'A', 'T','C', 'A', 'G', 'T','C', 'T', 'T', 'G','G', 'T', 'C'];
-const specimen2 = ['C', 'G', 'C', 'T', 'G', 'A', 'C', 'C','A', 'C', 'T', 'A','A', 'C', 'T'];
-const newSpecimen = pAequorFactory(30,specimen);
-const newSpecimen2 = pAequorFactory(4, specimen2);
-// console.log(newSpecimen.compareDNA(specimen2));
-// console.log(newSpecimen.willLikelySurvive());
-// console.log(newSpecimen.mutate());
-
-const samples = (array) =>{
-  let specimens = [];
-  let newObject = [];
-  for(let counter =0;counter < 3; counter++){
-   newObject = pAequorFactory(1, array);
-   specimens.push(newObject);
+//creating 30 instances of pAequor that can survive in their natural habitat. 
+const samples = () =>{
+  let samples = [];
+  do{
+   let specimen = mockUpStrand();
+   let newObject = pAequorFactory(1, specimen);
+   let willSurvive = newObject.willLikelySurvive();
+   if (willSurvive === true){
+     samples.push(specimen);
+   }  
   }
-  console.log(specimens);
+  while(samples.length < 30);
+ 
+  return samples;  
 }
 
-samples(specimen);
-/***
- * With the factory function set up, your team requests that you create 
- * 30 instances of pAequor that can survive in their natural environment. 
- * Store these instances in an array for your team to study later
- */
+ console.log(samples()); 
+ 
 
 
 
